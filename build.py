@@ -30,6 +30,7 @@
 #
 # This script also generates:
 #   blocks_compressed.js: The compressed common blocks.
+#   blocks_horizontal_compressed.js: The compressed Scratch horizontal blocks.
 #   blocks_vertical_compressed.js: The compressed Scratch vertical blocks.
 #   msg/js/<LANG>.js for every language <LANG> defined in msg/js/<LANG>.json.
 
@@ -38,7 +39,7 @@ if sys.version_info[0] != 2:
   raise Exception("Blockly build only compatible with Python 2.x.\n"
                   "You are using: " + sys.version)
 
-import errno, glob, httplib, json, os, re, subprocess, threading, urllib
+import errno, glob, httplib, json, os, re, subprocess, threading, urllib, platform
 
 REMOTE_COMPILER = "remote"
 
@@ -91,7 +92,10 @@ class Gen_uncompressed(threading.Thread):
     self.closure_env = closure_env
 
   def run(self):
-    target_filename = 'blockly_uncompressed_vertical.js'
+    if self.vertical:
+      target_filename = 'blockly_uncompressed_vertical.js'
+    else:
+      target_filename = 'blockly_uncompressed_horizontal.js'
     f = open(target_filename, 'w')
     f.write(HEADER)
     f.write(self.format_js("""
@@ -107,7 +111,7 @@ window.BLOCKLY_DIR = (function() {
   if (!isNodeJS) {
     // Find name of current directory.
     var scripts = document.getElementsByTagName('script');
-    var re = new RegExp('(.+)[\/]blockly_uncompressed_vertical\.js$');
+    var re = new RegExp('(.+)[\/]blockly_uncompressed(_vertical|_horizontal|)\.js$');
     for (var i = 0, script; script = scripts[i]; i++) {
       var match = re.exec(script.src);
       if (match) {
@@ -213,20 +217,26 @@ class Gen_compressed(threading.Thread):
   Uses the Closure Compiler's online API.
   Runs in a separate thread.
   """
-  def __init__(self, search_paths_vertical, closure_env):
+  def __init__(self, search_paths_vertical, search_paths_horizontal, closure_env):
     threading.Thread.__init__(self)
     self.search_paths_vertical = search_paths_vertical
+    self.search_paths_horizontal = search_paths_horizontal
     self.closure_env = closure_env
 
   def run(self):
     self.gen_core(True)
     self.gen_core(False)
+    self.gen_blocks("horizontal")
     self.gen_blocks("vertical")
     self.gen_blocks("common")
 
   def gen_core(self, vertical):
-    target_filename = 'blockly_compressed_vertical.js'
-    search_paths = self.search_paths_vertical
+    if vertical:
+      target_filename = 'blockly_compressed_vertical.js'
+      search_paths = self.search_paths_vertical
+    else:
+      target_filename = 'blockly_compressed_horizontal.js'
+      search_paths = self.search_paths_horizontal
     # Define the parameters for the POST request.
     params = [
       ("compilation_level", "SIMPLE"),
@@ -253,7 +263,10 @@ class Gen_compressed(threading.Thread):
     self.do_compile(params, target_filename, filenames, "")
 
   def gen_blocks(self, block_type):
-    if block_type == "vertical":
+    if block_type == "horizontal":
+      target_filename = "blocks_compressed_horizontal.js"
+      filenames = glob.glob(os.path.join("blocks_horizontal", "*.js"))
+    elif block_type == "vertical":
       target_filename = "blocks_compressed_vertical.js"
       filenames = glob.glob(os.path.join("blocks_vertical", "*.js"))
     elif block_type == "common":
@@ -311,11 +324,26 @@ class Gen_compressed(threading.Thread):
 
       # Build the final args array by prepending CLOSURE_COMPILER_NPM to
       # dash_args and dropping any falsy members
-      args = []
-      for group in [[CLOSURE_COMPILER_NPM], dash_args]:
-        args.extend(filter(lambda item: item, group))
+      if(platform.system() == "Windows"):
+        arg_data = " ".join(dash_args)
+        arg_data_list = list(arg_data)
+        n_pos = [i for i, x in enumerate(arg_data_list) if x == "\\"]
+        for x in range(len(n_pos)):
+          arg_data_list.insert(n_pos[len(n_pos) - x - 1], "\\")
+        arg_data = "".join(arg_data_list)
 
-      proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        arg_file_name = target_filename + ".config"
+        arg_file = open(arg_file_name, "w")
+        arg_file.write(arg_data)
+        arg_file.close()
+
+        args = [closure_compiler, "--flagfile", arg_file_name]
+        proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+      else:
+        args = []
+        for group in [[CLOSURE_COMPILER_NPM], dash_args]:
+          args.extend(filter(lambda item: item, group))
+        proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
       (stdout, stderr) = proc.communicate()
 
       # Build the JSON response.
@@ -539,6 +567,12 @@ class Gen_langfiles(threading.Thread):
       else:
         print("FAILED to create " + f)
 
+def exclude_vertical(item):
+  return not item.endswith("block_render_svg_vertical.js")
+
+def exclude_horizontal(item):
+  return not item.endswith("block_render_svg_horizontal.js")
+
 if __name__ == "__main__":
   try:
     closure_dir = CLOSURE_DIR_NPM
@@ -586,7 +620,8 @@ if __name__ == "__main__":
   search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(closure_root, closure_library)])
 
-  search_paths_vertical = search_paths
+  search_paths_horizontal = filter(exclude_vertical, search_paths)
+  search_paths_vertical = filter(exclude_horizontal, search_paths)
 
   closure_env = {
     "closure_dir": closure_dir,
@@ -600,9 +635,11 @@ if __name__ == "__main__":
   # Compressed is limited by network and server speed.
   # Vertical:
   Gen_uncompressed(search_paths_vertical, True, closure_env).start()
+  # Horizontal:
+  Gen_uncompressed(search_paths_horizontal, False, closure_env).start()
 
-  # Compressed forms of vertical
-  Gen_compressed(search_paths_vertical, closure_env).start()
+  # Compressed forms of vertical and horizontal.
+  Gen_compressed(search_paths_vertical, search_paths_horizontal, closure_env).start()
 
   # This is run locally in a separate thread.
   # Gen_langfiles().start()
