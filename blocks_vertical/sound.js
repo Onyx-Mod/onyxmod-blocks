@@ -341,6 +341,7 @@ Blockly.Blocks['sound_getEffectValue'] = {
     this.jsonInit({
       "inputsInline": true,
       "message0": "%1 effect",
+      "checkboxInFlyout": true,
       "category": Blockly.Categories.sound,
       "args0": [
         {

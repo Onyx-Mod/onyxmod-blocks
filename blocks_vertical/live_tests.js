@@ -288,6 +288,19 @@ Blockly.Blocks['control_blockduplicatesondrag'] = {
   }
 };
 
+Blockly.Blocks['control_dualblock'] = {
+  /**
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      "message0": 'dual block',
+      "category": Blockly.Categories.control,
+      "extensions": ["colours_control", "shape_statement", "output_string"]
+    });
+  }
+};
+
 Blockly.Blocks['operators_expandablejoininputs'] = {
   /**
    * @this Blockly.Block

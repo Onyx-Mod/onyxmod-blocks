@@ -357,6 +357,7 @@ Blockly.Blocks['looks_tintColor'] = {
     this.jsonInit({
       "message0": "tint color",
       "category": Blockly.Categories.looks,
+      "checkboxInFlyout": true,
       "extensions": ["colours_looks", "output_string"]
     });
   }
@@ -784,6 +785,7 @@ Blockly.Blocks["looks_layersGetLayer"] = {
       "inputsInline": true,
       "category": "looks",
       "message0": "layer",
+      "checkboxInFlyout": true,
       "extensions": [
         "output_number",
         "colours_looks"
@@ -918,6 +920,7 @@ Blockly.Blocks["looks_stretchGetX"] = {
   init: function() {
     this.jsonInit({
       "inputsInline": true,
+      "checkboxInFlyout": true,
       "category": "looks",
       "message0": "x stretch",
       "extensions": [
@@ -932,6 +935,7 @@ Blockly.Blocks["looks_stretchGetY"] = {
   init: function() {
     this.jsonInit({
       "inputsInline": true,
+      "checkboxInFlyout": true,
       "category": "looks",
       "message0": "y stretch",
       "extensions": [
@@ -948,6 +952,7 @@ Blockly.Blocks["looks_getSpriteVisible"] = {
       "inputsInline": true,
       "category": "looks",
       "message0": "visible?",
+      "checkboxInFlyout": true,
       "extensions": [
         "output_boolean",
         "colours_looks"
@@ -1004,6 +1009,7 @@ Blockly.Blocks["looks_getEffectValue"] = {
       "inputsInline": true,
       "category": "looks",
       "message0": "%1 effect",
+      "checkboxInFlyout": true,
       "args0": [
         {
           "type": "field_dropdown",
@@ -1038,6 +1044,7 @@ Blockly.Blocks["looks_sayHeight"] = {
       "inputsInline": true,
       "category": "looks",
       "message0": "bubble height",
+      "checkboxInFlyout": true,
       "extensions": [
         "output_string",
         "colours_looks"
@@ -1052,6 +1059,7 @@ Blockly.Blocks["looks_sayWidth"] = {
       "inputsInline": true,
       "category": "looks",
       "message0": "bubble width",
+      "checkboxInFlyout": true,
       "extensions": [
         "output_string",
         "colours_looks"
