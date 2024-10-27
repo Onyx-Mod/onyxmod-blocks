@@ -548,8 +548,7 @@ Blockly.InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate)
 Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
   if (this.highlightingBlock_) {
     this.unhighlightBlock_();
-  }
-  if (this.markerConnection_) {
+  } else if (this.markerConnection_) {
     this.disconnectMarker_();
   }
 };
@@ -639,8 +638,7 @@ Blockly.InsertionMarkerManager.prototype.disconnectMarker_ = function() {
   }
 
   if (imConn.targetConnection) {
-    imConn.targetConnection.sourceBlock_.unplug()
-    //throw 'markerConnection_ still connected at the end of disconnectInsertionMarker';
+    throw 'markerConnection_ still connected at the end of disconnectInsertionMarker';
   }
 
   this.markerConnection_ = null;
