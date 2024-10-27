@@ -2,9 +2,6 @@ name: Remote Dispatch Action Initiator
 #test
 on: [push]
 
-permissions:
-  contents: write
-
 jobs:
   ping-pong:
     runs-on: ubuntu-latest
