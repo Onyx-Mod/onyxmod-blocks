@@ -6,7 +6,7 @@ jobs:
   ping-pong:
     runs-on: ubuntu-latest
     permissions:
-      - contents: write
+      contents: write
     steps:
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v2.0.1
