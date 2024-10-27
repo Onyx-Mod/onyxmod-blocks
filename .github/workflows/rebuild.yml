@@ -7,6 +7,8 @@ on:
 
 jobs:
   rebuild:
+    permissions:
+      - contents: write
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
@@ -66,4 +68,4 @@ jobs:
         with:
           token: ${{ secrets.t }}
           event-type: update
-          repository: OnyxMod/onyxmod-gui
+          repository: OnyxmMod/onyxmod-gui
