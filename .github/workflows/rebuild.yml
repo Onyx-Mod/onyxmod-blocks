@@ -66,4 +66,4 @@ jobs:
         with:
           token: ${{ secrets.t }}
           event-type: update
-          repository: OnyxmMod/onyxmod-gui
+          repository: OnyxMod/onyxmod-gui
