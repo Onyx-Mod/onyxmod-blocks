@@ -6,7 +6,7 @@ on:
       - develop
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   rebuild:
@@ -69,4 +69,4 @@ jobs:
         with:
           token: ${{ secrets.t }}
           event-type: update
-          repository: PenguinMod/penguinmod.github.io
+          repository: OnyxmMod/onyxmod-gui

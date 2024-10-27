@@ -3,7 +3,7 @@ name: Remote Dispatch Action Initiator
 on: [push]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   ping-pong:
