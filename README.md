@@ -1,5 +1,5 @@
 # OnyxMod/scratch-blocks
--# Thanks to Snail IDE for build.py
+Thanks to Snail IDE for build.py
 
 <!-- ## Playgrounds
 
