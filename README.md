@@ -1,4 +1,5 @@
-# PenguinMod/scratch-blocks
+# OnyxMod/scratch-blocks
+-# Thanks to Snail IDE for build.py
 
 <!-- ## Playgrounds
 
