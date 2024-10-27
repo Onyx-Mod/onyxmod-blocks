@@ -5,6 +5,9 @@ on:
     branches:
       - develop
 
+permissions:
+  contents: write
+
 jobs:
   rebuild:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
