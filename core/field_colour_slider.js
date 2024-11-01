@@ -110,12 +110,12 @@ Blockly.FieldColourSlider.prototype.setValue = function(colour) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
         this.sourceBlock_, 'field', this.name, this.colour_, colour));
   }
-  colour = colour.slice(0, 7)
   this.colour_ = colour;
   if (this.sourceBlock_) {
-    // Set the primary, secondary and tertiary colour to this value.
+    // Set the colours to this value.
     // The renderer expects to be able to use the secondary colour as the fill for a shadow.
-    this.sourceBlock_.setColour(colour, colour, this.sourceBlock_.getColourTertiary());
+    this.sourceBlock_.setColour(colour, colour, this.sourceBlock_.getColourTertiary(),
+        this.sourceBlock_.getColourQuaternary());
   }
   this.updateSliderHandles_();
   this.updateDom_();
@@ -276,7 +276,7 @@ Blockly.FieldColourSlider.prototype.activateEyedropperInternal_ = function() {
   var thisField = this;
   Blockly.FieldColourSlider.activateEyedropper_(function(value) {
     // Update the internal hue/saturation/brightness values so sliders update.
-    var hsv = goog.color.hexToHsva(value);
+    var hsv = goog.color.hexToHsv(value);
     thisField.hue_ = hsv[0];
     thisField.saturation_ = hsv[1];
     thisField.brightness_ = hsv[2];
@@ -295,7 +295,7 @@ Blockly.FieldColourSlider.prototype.showEditor_ = function() {
 
   // Init color component values that are used while the editor is open
   // in order to keep the slider values stable.
-  var hsv = goog.color.hexToHsva(this.getValue());
+  var hsv = goog.color.hexToHsv(this.getValue());
   this.hue_ = hsv[0];
   this.saturation_ = hsv[1];
   this.brightness_ = hsv[2];
@@ -345,7 +345,7 @@ Blockly.FieldColourSlider.prototype.showEditor_ = function() {
             this.activateEyedropperInternal_);
   }
 
-  Blockly.DropDownDiv.setColour('#ffffff', '#dddddd');
+  Blockly.DropDownDiv.setColour(Blockly.Colours.valueReportBackground, Blockly.Colours.valueReportBorder);
   Blockly.DropDownDiv.setCategory(this.sourceBlock_.parentBlock_.getCategory());
   Blockly.DropDownDiv.showPositionedByBlock(this, this.sourceBlock_);
 

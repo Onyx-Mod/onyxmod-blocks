@@ -104,7 +104,8 @@ Blockly.Blocks['field_textdropdown_test'] = {
       "outputShape": Blockly.OUTPUT_SHAPE_ROUND,
       "colour": Blockly.Colours.textField,
       "colourSecondary": Blockly.Colours.textField,
-      "colourTertiary": Blockly.Colours.textField
+      "colourTertiary": Blockly.Colours.textField,
+      "colourQuaternary": Blockly.Colours.textField,
     })
   }
 }
