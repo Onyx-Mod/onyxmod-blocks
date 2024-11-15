@@ -255,6 +255,12 @@ Blockly.OUTPUT_SHAPE_ROUND = 2;
 Blockly.OUTPUT_SHAPE_SQUARE = 3;
 
 /**
+ * ENUM for output shape: leaf (really anything but i (jwklong) made it specifically for som of my extensions).
+ * @const
+ */
+Blockly.OUTPUT_SHAPE_LEAF = 4;
+
+/**
  * ENUM for categories.
  * @const
  */
