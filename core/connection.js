@@ -83,6 +83,13 @@ Blockly.Connection.prototype.targetConnection = null;
 Blockly.Connection.prototype.check_ = null;
 
 /**
+ * connection shape override
+ * @type {number?}
+ * @private
+ */
+Blockly.Connection.prototype.shape_ = null;
+
+/**
  * DOM representation of a shadow block, or null if none.
  * @type {Element}
  * @private
@@ -690,11 +697,28 @@ Blockly.Connection.prototype.setCheck = function(check) {
 };
 
 /**
+ * Change a connection's shape
+ * @param {number} shape Compatible value type or list of value types.
+ *     Null if all types are compatible.
+ * @return {!Blockly.Connection} The connection being modified
+ *     (to allow chaining).
+ */
+Blockly.Connection.prototype.setShape = function(shape) {
+  if (shape) {
+    this.shape_ = shape
+  } else {
+    this.shape_ = null;
+  }
+  return this;
+};
+
+/**
  * Returns a shape enum for this connection.
  * Used in scratch-blocks to draw unoccupied inputs.
  * @return {number} Enum representing shape.
  */
 Blockly.Connection.prototype.getOutputShape = function() {
+  if (this.shape_) return this.shape_
   if (!this.check_) return Blockly.OUTPUT_SHAPE_ROUND;
   if (this.check_.indexOf('Boolean') !== -1) {
     return Blockly.OUTPUT_SHAPE_HEXAGONAL;

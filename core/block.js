@@ -1525,6 +1525,9 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
       if (field) {
         fieldStack.push([field, element['name']]);
       } else if (input) {
+        if (element['shape']) {
+          input.setShape(element['shape']);
+        }
         if (element['check']) {
           input.setCheck(element['check']);
         }

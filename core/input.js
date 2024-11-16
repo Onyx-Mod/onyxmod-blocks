@@ -218,6 +218,14 @@ Blockly.Input.prototype.setCheck = function(check) {
   return this;
 };
 
+Blockly.Input.prototype.setShape = function(shape) {
+  if (!this.connection) {
+    throw 'This input does not have a connection.';
+  }
+  this.connection.setShape(shape);
+  return this;
+};
+
 /**
  * Change the alignment of the connection's field(s).
  * @param {number} align One of Blockly.ALIGN_LEFT, ALIGN_CENTRE, ALIGN_RIGHT.

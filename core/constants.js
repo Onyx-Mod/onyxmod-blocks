@@ -261,6 +261,12 @@ Blockly.OUTPUT_SHAPE_SQUARE = 3;
 Blockly.OUTPUT_SHAPE_LEAF = 4;
 
 /**
+ * ENUM for output shape: plus (another custom one).
+ * @const
+ */
+Blockly.OUTPUT_SHAPE_PLUS = 5;
+
+/**
  * ENUM for categories.
  * @const
  */
