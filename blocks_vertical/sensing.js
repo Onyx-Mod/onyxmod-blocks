@@ -891,7 +891,7 @@ Blockly.Blocks["sensing_regextest"] = {
   init: function() {
     this.jsonInit({
       "inputsInline": true,
-      "message0": "test regex %2 %3 with with text %1",
+      "message0": "test regex %2 %3 with text %1",
       "args0": [
         {
           "type": "input_value",
